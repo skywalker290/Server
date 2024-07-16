@@ -2,60 +2,28 @@ from flask import Flask, request, send_from_directory
 import os
 from cloner import *
 from flask import Flask, send_file
+from functions import *
 
 app = Flask(__name__, static_url_path='/Output_mp3')
 
 @app.route("/", methods=['POST'])
-def hello():
-    PUBLIC_IP = "13.235.143.16"
-    MY_KEY = "7865"
-    data = request.get_json()
-    
-    if not data:
-        return "Invalid request: No JSON payload found", 400
-    
-    KEY = data.get('KEY')
-    
-    if(KEY):
-        if(KEY != MY_KEY):
-            return "Authorization Failed [Incorrect Credentials]!", 401
-    else:
-        return "Authorization Failed [Key Not Found]!", 401
-    
-    input_wav = data.get('input_wav')
-    language = data.get('language')
-    input_text = data.get('text')
-
-
-    output_file = gen_name() + '.mp3'
-
-    output_path = "Output_mp3/" + output_file
-    
-    input_file = "Input_wavs/obama.wav"
-
-    output_language = "en"
-
-    text = ""
-    
-    if input_wav:
-        input_file = 'Input_wavs/' + input_wav
-    if language:
-        output_language = language
-    if input_text:
-        text = input_text
-    else:
-        return "Pass the Text!", 400
-    
-    cloner(text=text, lang=output_language, input_wav=input_file, output_file=output_path)
-    
-    # return send_from_directory('.', 'output.mp3', as_attachment=True)
-    return f"http://{PUBLIC_IP}/get-file/{output_file}"
-
+def clone():
+    return Cloner(request=request)
 
 @app.route('/get-file/<filename>', methods=['GET'])
 def get_file(filename):
     filename='Output_mp3/'+filename 
     return send_file(filename, as_attachment=True)
+
+@app.route('/list-speakers/',methods=['GET'])
+def list_speakers():
+    return list_files()
+
+@app.route('/refresh-speakers/',methods=['GET'])
+def refresh_speakers():
+    git_pull("Input_wavs")
+    return list_files()
+
 
 if __name__ == "__main__":
     app.run()
