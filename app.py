@@ -8,6 +8,9 @@ app = Flask(__name__, static_url_path='/Output_mp3')
 
 @app.route("/", methods=['POST'])
 def clone():
+    check = check_credentials(request)
+    if(check != True):
+        return check
     return Cloner(request=request)
 
 @app.route('/get-file/<filename>', methods=['GET'])
@@ -17,10 +20,16 @@ def get_file(filename):
 
 @app.route('/list-speakers/',methods=['GET'])
 def list_speakers():
+    check = check_credentials(request)
+    if(check != True):
+        return check
     return list_files()
 
 @app.route('/refresh-speakers/',methods=['GET'])
 def refresh_speakers():
+    check = check_credentials(request)
+    if(check != True):
+        return check
     git_pull("Input_wavs")
     return list_files()
 

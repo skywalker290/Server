@@ -25,19 +25,7 @@ def gen_name():
 
 def Cloner(request):
     PUBLIC_IP = "13.235.143.16"
-    MY_KEY = "7865"
     data = request.get_json()
-    
-    if not data:
-        return "Invalid request: No JSON payload found", 400
-    
-    KEY = data.get('KEY')
-    
-    if(KEY):
-        if(KEY != MY_KEY):
-            return "Authorization Failed [Incorrect Credentials]!", 401
-    else:
-        return "Authorization Failed [Key Not Found]!", 401
     
     input_wav = data.get('input_wav')
     language = data.get('language')

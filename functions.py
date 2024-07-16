@@ -25,3 +25,22 @@ def git_pull(repo_path):
         return output
     except subprocess.CalledProcessError as e:
         return f"An error occurred: {e.stderr.decode('utf-8')}"
+    
+def check_credentials(request):
+    MY_KEY = "7865"
+    data = request.get_json()
+
+    if not data:
+        return "Invalid request: No JSON payload found", 400
+
+    KEY = data.get('KEY')
+
+    if(KEY):
+        if(KEY != MY_KEY):
+            return "Authorization Failed [Incorrect Credentials]!", 401
+    else:
+        return "Authorization Failed [Key Not Found]!", 401
+    
+    return True
+
+    
