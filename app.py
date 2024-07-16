@@ -48,6 +48,7 @@ def hello():
 
 @app.route('/get-file/<filename>', methods=['GET'])
 def get_file(filename):
+    filename='Output_mp3/'+filename 
     return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
