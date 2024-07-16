@@ -3,7 +3,7 @@ import os
 from cloner import *
 from flask import Flask, send_file
 
-app = Flask(__name__, static_url_path='/')
+app = Flask(__name__, static_url_path='/Output_mp3')
 
 @app.route("/", methods=['POST'])
 def hello():
