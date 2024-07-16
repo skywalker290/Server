@@ -7,7 +7,7 @@ app = Flask(__name__, static_url_path='/Output_mp3')
 
 @app.route("/", methods=['POST'])
 def hello():
-    PUBLIC_IP = "127.0.0.1"
+    PUBLIC_IP = "13.235.143.16"
     MY_KEY = "7865"
     data = request.get_json()
     
@@ -28,7 +28,7 @@ def hello():
 
 
     output_file = gen_name() + '.mp3'
-    
+
     output_path = "Output_mp3/" + output_file
     
     input_file = "Input_wavs/obama.wav"
