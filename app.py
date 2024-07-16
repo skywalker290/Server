@@ -25,8 +25,8 @@ def hello():
     input_wav = data.get('input_wav')
     language = data.get('language')
     input_text = data.get('text')
-    output_file = "output.mp3"
-    input_file = "obama.wav"
+    output_file = "Output_mp3/output.mp3"
+    input_file = "Input_wavs/obama.wav"
     model_name = "tts_models/multilingual/multi-dataset/xtts_v2"
     output_language = "en"
     text = ""
