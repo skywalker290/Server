@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Array of names
-names=('hi' 'bn' 'gu' 'kn' 'ml' 'mr' 'or' 'pa' 'ta' 'te')
+names=('hi' 'bn' 'kn' 'ml' 'mr' 'or' 'ta' 'te')
+# gu  hi  kn  ml  mr  or  pa  bn
+
 # names = ( 'hi' 'as')
 
 # Base URL
