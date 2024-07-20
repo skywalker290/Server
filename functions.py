@@ -1,6 +1,8 @@
 from flask import jsonify
 import os
 import subprocess
+from pydub import AudioSegment
+from datetime import datetime
 
 def list_files():
     try:
@@ -42,5 +44,16 @@ def check_credentials(request):
         return "Authorization Failed [Key Not Found]!", 401
     
     return True
+
+
+
+def convert_wav_to_mp3(input_wav_file, output_mp3_file):
+    audio = AudioSegment.from_wav(input_wav_file)    
+    audio.export(output_mp3_file, format="mp3")
+    print(f"Converted {input_wav_file} to {output_mp3_file}")
+
+
+def gen_name():
+    return str(datetime.now().strftime("%Y%m%d%H%M%S"))
 
     
