@@ -27,8 +27,6 @@ def Cloner(request):
         if(language!='en'):
             return indicTTS(request)
 
-
-
     output_file = gen_name() + '.mp3'
 
     output_path = "Output_mp3/" + output_file

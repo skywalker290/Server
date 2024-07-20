@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Array of names
-names=('hi' 'bn' 'kn' 'ml' 'mr' 'or' 'ta' 'te')
+names=('hi' 'kn' 'ml' 'mr' 'or' 'ta' 'te')
 # gu  hi  kn  ml  mr  or  pa  bn
 
 # names = ( 'hi' 'as')

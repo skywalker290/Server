@@ -45,11 +45,16 @@ def TTS_to_file(synthesizer,text,speaker_name,speaker_wav):
 def indicTTS(request):
     PUBLIC_IP = "13.235.143.16"
     data = request.get_json()
+
+    available_language = ['hi','kn','ml','mr','or','ta','te']
     
     input_wav = data.get('input_wav')
     language = data.get('language')
     input_text = data.get('text')
     speaker = data.get('speaker_name')
+
+    if(language not in available_language):
+        return "Specify, Valid Language!" ,400
 
     speaker_name = "male"
     input_file = None

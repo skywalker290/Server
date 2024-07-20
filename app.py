@@ -32,6 +32,28 @@ def refresh_speakers():
         return check
     git_pull("Input_wavs")
     return list_files()
+@app.route('/languages/',methods=['GET'])
+def show_languages():
+    text = """
+    Available:
+    'hi' : "Hindi - हिंदी",
+    'kn' : "Kannada - ಕನ್ನಡ",
+    'ml' : "Malayalam - മലയാളം",
+    'mr' : "Marathi - मराठी",
+    'or' : "Oriya - ଓଡ଼ିଆ",
+    'ta' : "Tamil - தமிழ்",
+    'te' : "Telugu - తెలుగు",
+    
+    Upcomming:
+    'as' : "Assamese - অসমীয়া",
+    'bn' : "Bangla - বাংলা",
+    'brx': "Boro - बड़ो",
+    'gu' : "Gujarati - ગુજરાતી",
+    'pa' : "Punjabi - ਪੰਜਾਬੀ",
+    'raj': "Rajasthani - राजस्थानी",
+    'mni': "Manipuri - মিতৈলোন",
+    """
+    return text, 200
 
 
 
