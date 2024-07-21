@@ -22,9 +22,9 @@ def init_synthesizer(language):
     )
     return synthesizer
 
-def TTS_to_file(synthesizer,text,speaker_name,speaker_wav):
+def TTS_to_file(synthesizer,text,speaker_name,speaker_wav,pitch_change,speed_change,decibel_change):
     
-    output_file = gen_name() + '.mp3'
+    output_file = gen_name() + '.wav'
     output_path = "Output_mp3/" + output_file
 
     wav = synthesizer.tts(
@@ -39,7 +39,9 @@ def TTS_to_file(synthesizer,text,speaker_name,speaker_wav):
         split_sentences=True,
     )
     synthesizer.save_wav(wav=wav, path=output_path)
-    convert_wav_to_mp3(output_path,output_path)
+    modify_audio(output_path,pitch_change=pitch_change,speed_change=speed_change,decibel_change=decibel_change)
+    convert_wav_to_mp3(output_path,output_path[:-4]+'.mp3')
+    os.remove(os.getcwd()+'/'+output_path)
     return output_file
 
 def indicTTS(request):
@@ -52,6 +54,9 @@ def indicTTS(request):
     language = data.get('language')
     input_text = data.get('text')
     speaker = data.get('speaker_name')
+    pitch_change = float(data.get('pitch'))
+    speed_change = float(data.get('speed'))
+    decibel_change = float(data.get('decibel'))
 
     if(language not in available_language):
         return "Specify, Valid Language!" ,400
@@ -73,7 +78,11 @@ def indicTTS(request):
         synthesizer=synthesizer,
         text=text,
         speaker_name=speaker_name,
-        speaker_wav=input_file
+        speaker_wav=input_file,
+        speed_change=speed_change,
+        decibel_change=decibel_change,
+        pitch_change=pitch_change
         )
     
-    return f"http://{PUBLIC_IP}/get-file/{output_file}"
+    
+    return f"http://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"

@@ -10,7 +10,7 @@ tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 def cloner(text,lang,input_wav,output_path):
     tts.tts_to_file(text=text, speaker_wav=input_wav, language=lang, file_path=output_path)
-    convert_wav_to_mp3(output_path,output_path)
+    
 
 
 def Cloner(request):
@@ -26,8 +26,12 @@ def Cloner(request):
     else:
         if(language!='en'):
             return indicTTS(request)
+        
+    pitch_change = float(data.get('pitch'))
+    speed_change = float(data.get('speed'))
+    decibel_change = float(data.get('decibel'))
 
-    output_file = gen_name() + '.mp3'
+    output_file = gen_name() + '.wav'
 
     output_path = "Output_mp3/" + output_file
     
@@ -46,7 +50,10 @@ def Cloner(request):
     else:
         return "Pass the Text!", 400
     
-    cloner(text=text, lang=output_language, input_wav=input_file, output_file=output_path)
+    cloner(text=text, lang=output_language, input_wav=input_file, output_path=output_path)
+    modify_audio(output_path,pitch_change=pitch_change,decibel_change=decibel_change,speed_change=speed_change)
+    convert_wav_to_mp3(output_path,output_path[:-4]+'.mp3')
+    os.remove(os.getcwd()+'/'+output_path)
     
     # return send_from_directory('.', 'output.mp3', as_attachment=True)
-    return f"http://{PUBLIC_IP}/get-file/{output_file}"
+    return f"http://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"

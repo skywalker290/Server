@@ -6,7 +6,7 @@ from functions import *
 
 app = Flask(__name__, static_url_path='/Output_mp3')
 
-@app.route("/", methods=['POST'])
+@app.route("/GenerateVoice/", methods=['POST'])
 def clone():
     check = check_credentials(request)
     if(check != True):
