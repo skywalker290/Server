@@ -54,9 +54,9 @@ def indicTTS(request):
     language = data.get('language')
     input_text = data.get('text')
     speaker = data.get('speaker_name')
-    pitch_change = float(data.get('pitch'))
-    speed_change = float(data.get('speed'))
-    decibel_change = float(data.get('decibel'))
+    pitch_change = data.get('pitch')
+    speed_change = data.get('speed')
+    decibel_change = data.get('decibel')
 
     if(language not in available_language):
         return "Specify, Valid Language!" ,400

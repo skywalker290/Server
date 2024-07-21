@@ -78,14 +78,17 @@ def modify_audio(input_file, pitch_change, speed_change, decibel_change):
 
     # Change pitch
     if pitch_change:
+        pitch_change = float(pitch_change)
         audio = change_pitch(audio, pitch_change)
     
     # Change speed
     if speed_change:
+        speed_change = float(speed_change)
         audio = change_speed(audio, speed_change)
     
     # Change volume
     if decibel_change:
+        decibel_change = float(decibel_change)
         audio = change_volume(audio, decibel_change)
     
     # Export the modified audio
