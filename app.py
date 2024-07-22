@@ -3,15 +3,18 @@ import os
 from cloner import *
 from flask import Flask, send_file
 from functions import *
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__, static_url_path='/Output_mp3')
+CORS(app)
+
 
 @app.route("/GenerateVoice/", methods=['POST'])
 def clone():
     check = check_credentials(request)
     if(check != True):
         return check
-    return Cloner(request=request)
+    return gen_json(Cloner(request=request))
 
 @app.route('/get-file/<filename>', methods=['GET'])
 def get_file(filename):

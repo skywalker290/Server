@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, make_response
 import os
 import subprocess
 from pydub import AudioSegment
@@ -94,6 +94,12 @@ def modify_audio(input_file, pitch_change, speed_change, decibel_change):
     # Export the modified audio
     audio.export(input_file, format="wav")
     print(f'Modified audio saved as {input_file}')
+
+def gen_json(Data):
+    response = {
+        "data": Data
+    }
+    return jsonify(response)
 
 
 
