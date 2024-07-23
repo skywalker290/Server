@@ -37,26 +37,37 @@ def refresh_speakers():
     return list_files()
 @app.route('/languages/',methods=['GET'])
 def show_languages():
-    text = """
-    Available:
-    'hi' : "Hindi - हिंदी",
-    'kn' : "Kannada - ಕನ್ನಡ",
-    'ml' : "Malayalam - മലയാളം",
-    'mr' : "Marathi - मराठी",
-    'or' : "Oriya - ଓଡ଼ିଆ",
-    'ta' : "Tamil - தமிழ்",
-    'te' : "Telugu - తెలుగు",
-    
-    Upcomming:
-    'as' : "Assamese - অসমীয়া",
-    'bn' : "Bangla - বাংলা",
-    'brx': "Boro - बड़ो",
-    'gu' : "Gujarati - ગુજરાતી",
-    'pa' : "Punjabi - ਪੰਜਾਬੀ",
-    'raj': "Rajasthani - राजस्थानी",
-    'mni': "Manipuri - মিতৈলোন",
-    """
-    return text, 200
+    text = {
+    "hi": {
+        "et": "Hindi",
+        "lt": "हिंदी"
+    },
+    "kn": {
+        "et": "Kannada",
+        "lt": "ಕನ್ನಡ"
+    },
+    "ml": {
+        "et": "Malayalam",
+        "lt": "മലയാളം"
+    },
+    "mr": {
+        "et": "Marathi",
+        "lt": "मराठी"
+    },
+    "or": {
+        "et": "Oriya",
+        "lt": "ଓଡ଼ିଆ"
+    },
+    "ta": {
+        "et": "Tamil",
+        "lt": "தமிழ்"
+    },
+    "te": {
+        "et": "Telugu",
+        "lt": "తెలుగు"
+    }
+}
+    return jsonify(text), 200
 
 
 
