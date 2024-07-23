@@ -38,6 +38,10 @@ def refresh_speakers():
 @app.route('/languages/',methods=['GET'])
 def show_languages():
     text = {
+    "en": {
+        "et": "English",
+        "lt": "English"
+    },
     "hi": {
         "et": "Hindi",
         "lt": "हिंदी"
