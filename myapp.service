@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn instance for a simple flask application
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/Server
+ExecStart=/home/ubuntu/.pyenv/versions/3.10.13/bin/gunicorn -b localhost:5000 app:app
+Restart=always
+[install]
+WantedBy=multi-user.target
