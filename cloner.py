@@ -27,9 +27,9 @@ def Cloner(request):
         if(language!='en'):
             return indicTTS(request)
         
-    pitch_change = float(data.get('pitch'))
-    speed_change = float(data.get('speed'))
-    decibel_change = float(data.get('decibel'))
+    pitch_change = data.get('pitch')
+    speed_change = data.get('speed')
+    decibel_change = data.get('decibel')
 
     output_file = gen_name() + '.wav'
 

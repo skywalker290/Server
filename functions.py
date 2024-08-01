@@ -104,7 +104,7 @@ def gen_json(Data):
 
 
 # Example usage
-# modify_audio('/home/skywalker/#/Server/Input_wavs/hindi_output.wav', '/home/skywalker/#/Server/Output_mp3/modified_ouput.wav', pitch_change=-2, speed_change=1, decibel_change=5)
+# modify_audio('/home/skywalker/#/Server/Input_wavs/hindi_output.wav', '/home/skywalker/#/Server/Output_mp3/modified_ouput.wav', 0, 1, )
 
 
     
