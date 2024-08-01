@@ -45,7 +45,7 @@ def TTS_to_file(synthesizer,text,speaker_name,speaker_wav,pitch_change,speed_cha
     return output_file
 
 def indicTTS(request):
-    PUBLIC_IP = "13.235.143.16"
+    PUBLIC_IP = "13.200.241.87"
     data = request.get_json()
 
     available_language = ['hi','kn','ml','mr','or','ta','te']
