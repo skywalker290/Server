@@ -48,7 +48,7 @@ def indicTTS(request):
     PUBLIC_IP = "13.200.241.87"
     data = request.get_json()
 
-    available_language = ['hi','kn','ml','mr','or','ta','te']
+    available_language = ['gu','hi','kn','ml','mni','mr','or','pa','raj','ta','te','as','bn','brx']
     
     input_wav = data.get('input_wav')
     language = data.get('language')
