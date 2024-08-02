@@ -38,39 +38,64 @@ def refresh_speakers():
 @app.route('/languages/',methods=['GET'])
 def show_languages():
     text = {
-    "en": {
-        "et": "English",
-        "lt": "English"
-    },
-    "hi": {
-        "et": "Hindi",
-        "lt": "हिंदी"
-    },
-    "kn": {
-        "et": "Kannada",
-        "lt": "ಕನ್ನಡ"
-    },
-    "ml": {
-        "et": "Malayalam",
-        "lt": "മലയാളം"
-    },
-    "mr": {
-        "et": "Marathi",
-        "lt": "मराठी"
-    },
-    "or": {
-        "et": "Oriya",
-        "lt": "ଓଡ଼ିଆ"
-    },
-    "ta": {
-        "et": "Tamil",
-        "lt": "தமிழ்"
-    },
-    "te": {
-        "et": "Telugu",
-        "lt": "తెలుగు"
+        "gu": {
+            "et": "Gujarati",
+            "lt": "ગુજરાતી"
+        },
+        "hi": {
+            "et": "Hindi",
+            "lt": "हिंदी"
+        },
+        "kn": {
+            "et": "Kannada",
+            "lt": "ಕನ್ನಡ"
+        },
+        "ml": {
+            "et": "Malayalam",
+            "lt": "മലയാളം"
+        },
+        "mni": {
+            "et": "Manipuri",
+            "lt": "মণিপুরী"
+        },
+        "mr": {
+            "et": "Marathi",
+            "lt": "मराठी"
+        },
+        "or": {
+            "et": "Oriya",
+            "lt": "ଓଡ଼ିଆ"
+        },
+        "pa": {
+            "et": "Punjabi",
+            "lt": "ਪੰਜਾਬੀ"
+        },
+        "raj": {
+            "et": "Rajasthani",
+            "lt": "राजस्थानी"
+        },
+        "ta": {
+            "et": "Tamil",
+            "lt": "தமிழ்"
+        },
+        "te": {
+            "et": "Telugu",
+            "lt": "తెలుగు"
+        },
+        "as": {
+            "et": "Assamese",
+            "lt": "অসমীয়া"
+        },
+        "bn": {
+            "et": "Bengali",
+            "lt": "বাংলা"
+        },
+        "brx": {
+            "et": "Bodo",
+            "lt": "बर'"
+        }
     }
-}
+
     return jsonify(text), 200
 
 
