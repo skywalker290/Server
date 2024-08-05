@@ -39,6 +39,9 @@ def refresh_speakers():
 
 @app.route('/Cloner/',methods=['POST'])
 def rvc():
+    check = check_credentials(request)
+    if(check != True):
+        return check
     return gen_json(RVC(request))
 
 @app.route('/languages/',methods=['GET'])
