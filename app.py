@@ -4,6 +4,7 @@ from cloner import *
 from flask import Flask, send_file
 from functions import *
 from flask_cors import CORS, cross_origin
+from RVC import *
 
 app = Flask(__name__, static_url_path='/Output_mp3')
 CORS(app)
@@ -35,6 +36,11 @@ def refresh_speakers():
         return check
     git_pull("Input_wavs")
     return list_files()
+
+@app.route('/Cloner/',methods=['POST'])
+def rvc():
+    return gen_json(RVC(request))
+
 @app.route('/languages/',methods=['GET'])
 def show_languages():
     text = {

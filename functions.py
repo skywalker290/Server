@@ -57,9 +57,6 @@ def convert_wav_to_mp3(input_wav_file, output_mp3_file):
 def gen_name():
     return str(datetime.now().strftime("%Y%m%d%H%M%S"))
 
-
-
-
 def change_pitch(audio_segment, semitones):
     new_sample_rate = int(audio_segment.frame_rate * (2.0 ** (semitones / 12.0)))
     return audio_segment._spawn(audio_segment.raw_data, overrides={'frame_rate': new_sample_rate}).set_frame_rate(audio_segment.frame_rate)
