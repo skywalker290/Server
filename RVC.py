@@ -8,7 +8,7 @@ DIR =   "/home/ubuntu/RealVC/"
 def RVC(request):
     data = request.get_json()
     file_path = data.get('input_file')
-    voice_name = voice_name.get('voice_name')
+    voice_name = data.get('voice_name')
     
     file_path = check_file_exist(file_path)
     output_path = RVC_gen(file_path,voice_name)
