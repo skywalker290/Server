@@ -13,7 +13,7 @@ def RVC(request):
     file_path = check_file_exist(file_path)
     output_path = RVC_gen(file_path,voice_name)
 
-    return output_path
+    return f"13.200.241.87/get-file/{file_path.split("/")[-1]}"
 
 
 def RVC_gen(input_path,model_name):
