@@ -72,7 +72,7 @@ def check_file_exist(download_path):
     file_name = download_path.split('/')[-1]
 
     if not os.path.exists(downloads+file_name):
-        command = "wget -O /home/ubuntu/Server/Output_mp3/{file_name} {download_path}"
+        command = "wget -P /home/ubuntu/Server/Output_mp3/ {download_path}"
         result = subprocess.run(command, shell=True, check=True)
         print(f"downloaed file {file_name}")
 
