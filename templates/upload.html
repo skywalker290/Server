@@ -1,9 +1,62 @@
-<html>
-   <body>
-      <form action = "http://13.200.241.87/uploader" method = "POST" 
-         enctype = "multipart/form-data">
-         <input type = "file" name = "file" />
-         <input type = "submit"/>
-      </form>
-   </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload with Progress Bar</title>
+</head>
+<body>
+    <h2>Upload a File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" required>
+        <input type="submit" value="Upload">
+    </form>
+    <br>
+    <div id="progressWrapper" style="width: 100%; background-color: #f3f3f3;">
+        <div id="progressBar" style="width: 0%; height: 30px; background-color: #4caf50; text-align: center; color: white;">
+            0%
+        </div>
+    </div>
+    <div id="uploadStatus"></div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = function(event) {
+            event.preventDefault();  // Prevent the form from submitting in the traditional way
+
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/uploader', true);
+
+            // Update the progress bar
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / event.total) * 100;
+                    var progressBar = document.getElementById('progressBar');
+                    progressBar.style.width = percentComplete + '%';
+                    progressBar.innerHTML = Math.round(percentComplete) + '%';
+                }
+            };
+
+            // Display a success message when upload is complete
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    document.getElementById('uploadStatus').innerHTML = 'File uploaded successfully!';
+                } else {
+                    document.getElementById('uploadStatus').innerHTML = 'Upload failed: ' + xhr.statusText;
+                }
+            };
+
+            // Handle errors
+            xhr.onerror = function() {
+                document.getElementById('uploadStatus').innerHTML = 'An error occurred during the upload.';
+            };
+
+            xhr.send(formData);
+        };
+    </script>
+</body>
 </html>
