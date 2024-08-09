@@ -9,6 +9,9 @@ from RVC import *
 app = Flask(__name__, static_url_path='/Output_mp3')
 CORS(app)
 
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB
+
+
 
 @app.route("/GenerateVoice/", methods=['POST'])
 def clone():
@@ -118,9 +121,6 @@ def upload_file():
       file_path = os.path.join("Output_mp3", f.filename)
       f.save(file_path)
       return 'file uploaded successfully'
-
-
-
 
 if __name__ == "__main__":
     app.run()
