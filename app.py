@@ -1,4 +1,4 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, render_template
 import os
 from cloner import *
 from flask import Flask, send_file
@@ -106,6 +106,18 @@ def show_languages():
     }
 
     return jsonify(text), 200
+
+@app.route('/upload')
+def upload_filee():
+   return render_template('upload.html')
+	
+@app.route('/uploader', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      file_path = os.path.join("Output_mp3", f.filename)
+      f.save(file_path)
+      return 'file uploaded successfully'
 
 
 
