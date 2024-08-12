@@ -3,39 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload with Progress Bar</title>
+    <title>Record or Upload Audio</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+
+        button, input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:disabled, input[type="submit"]:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        audio {
+            margin: 20px 0;
+            width: 100%;
+            outline: none;
+        }
+
+        #progressWrapper, #fileProgressWrapper {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        /* Updated progress bar styling */
+        #progressBar, #fileProgressBar {
+            width: 0%;
+            height: 30px;
+            background: linear-gradient(90deg, #4caf50, #81c784);
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+
+        /* Hover effect for progress bar */
+        #progressBar:hover, #fileProgressBar:hover {
+            background: linear-gradient(90deg, #81c784, #66bb6a);
+        }
+
+        #uploadStatus, #fileUploadStatus {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        .section-divider {
+            margin: 30px 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        /* Custom styling for the file input */
+        .custom-file-upload {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #45a049;
+        }
+
+        /* Hide the default file input */
+        input[type="file"] {
+            display: none;
+        }
+
+        /* File name display styling */
+        #fileName {
+            margin-left: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h2>Upload a File</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="file" id="fileInput" required>
-        <input type="submit" value="Upload">
-    </form>
-    <br>
-    <div id="progressWrapper" style="width: 100%; background-color: #f3f3f3;">
-        <div id="progressBar" style="width: 0%; height: 30px; background-color: #4caf50; text-align: center; color: white;">
-            0%
+    <div class="container">
+        <h2>Record or Upload Audio</h2>
+
+        <!-- Recording Section -->
+        <h3>Record Audio</h3>
+        <button id="recordButton">Start Recording</button>
+        <button id="stopButton" disabled>Stop Recording</button>
+        <audio id="audioPlayback" controls></audio>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="submit" value="Upload Recording" disabled id="uploadButton">
+        </form>
+        <div id="progressWrapper">
+            <div id="progressBar">0%</div>
         </div>
+        <div id="uploadStatus"></div>
+
+        <div class="section-divider"></div>
+
+        <!-- File Upload Section -->
+        <h3>Upload a File</h3>
+        <form id="fileUploadForm" enctype="multipart/form-data">
+            <label for="fileInput" class="custom-file-upload">Choose File</label>
+            <span id="fileName">No file chosen</span>
+            <input type="file" id="fileInput" name="file" required>
+            <input type="submit" value="Upload File">
+        </form>
+        <div id="fileProgressWrapper">
+            <div id="fileProgressBar">0%</div>
+        </div>
+        <div id="fileUploadStatus"></div>
     </div>
-    <div id="uploadStatus"></div>
 
     <script>
+        function getTimestampFilename() {
+            const now = new Date();
+            const YYYY = now.getFullYear();
+            const MM = String(now.getMonth() + 1).padStart(2, '0');
+            const DD = String(now.getDate()).padStart(2, '0');
+            const HH = String(now.getHours()).padStart(2, '0');
+            const MMSS = String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
+            return `${YYYY}${MM}${DD}${HH}${MMSS}.mp3`;
+        }
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        const recordButton = document.getElementById('recordButton');
+        const stopButton = document.getElementById('stopButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const audioPlayback = document.getElementById('audioPlayback');
+
+        // Start recording
+        recordButton.onclick = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl;
+                uploadButton.disabled = false;
+                audioChunks = [];  // Clear the chunks for next recording
+            };
+
+            recordButton.disabled = true;
+            stopButton.disabled = false;
+        };
+
+        // Stop recording
+        stopButton.onclick = () => {
+            mediaRecorder.stop();
+            recordButton.disabled = false;
+            stopButton.disabled = true;
+        };
+
+        // Handle recording upload
         document.getElementById('uploadForm').onsubmit = function(event) {
-            event.preventDefault();  // Prevent the form from submitting in the traditional way
+            event.preventDefault();
 
-            var fileInput = document.getElementById('fileInput');
-            var file = fileInput.files[0];
-            var formData = new FormData();
-            formData.append('file', file);
+            const formData = new FormData();
+            const filename = getTimestampFilename();
+            formData.append('file', audioBlob, filename);
 
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.open('POST', '/uploader', true);
 
             // Update the progress bar
             xhr.upload.onprogress = function(event) {
                 if (event.lengthComputable) {
-                    var percentComplete = (event.loaded / event.total) * 100;
-                    var progressBar = document.getElementById('progressBar');
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    const progressBar = document.getElementById('progressBar');
                     progressBar.style.width = percentComplete + '%';
                     progressBar.innerHTML = Math.round(percentComplete) + '%';
                 }
@@ -43,8 +224,8 @@
 
             // Display a success message when upload is complete
             xhr.onload = function() {
-                if (xhr.status == 200) {
-                    document.getElementById('uploadStatus').innerHTML = 'File uploaded successfully!';
+                if (xhr.status === 200) {
+                    document.getElementById('uploadStatus').innerHTML = filename + ' uploaded successfully!';
                 } else {
                     document.getElementById('uploadStatus').innerHTML = 'Upload failed: ' + xhr.statusText;
                 }
@@ -57,6 +238,52 @@
 
             xhr.send(formData);
         };
+
+        // Handle file upload
+        document.getElementById('fileUploadForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            formData.append('file', file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/uploader', true);
+
+            // Update the progress bar
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    const progressBar = document.getElementById('fileProgressBar');
+                    progressBar.style.width = percentComplete + '%';
+                    progressBar.innerHTML = Math.round(percentComplete) + '%';
+                }
+            };
+
+            // Display a success message when upload is complete
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.getElementById('fileUploadStatus').innerHTML = 'File uploaded successfully!';
+                } else {
+                    document.getElementById('fileUploadStatus').innerHTML = 'Upload failed: ' + xhr.statusText;
+                }
+            };
+
+            // Handle errors
+            xhr.onerror = function() {
+                document.getElementById('fileUploadStatus').innerHTML = 'An error occurred during the upload.';
+            };
+
+            xhr.send(formData);
+        };
+
+        // Display selected file name
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+            document.getElementById('fileName').textContent = fileName;
+        });
     </script>
 </body>
 </html>
+
