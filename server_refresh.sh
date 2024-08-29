@@ -8,6 +8,8 @@
 # This will Refresh the Server Running Clearing the output of Previous Run and 
 cd ~/Server/
 
+git pull
+
 PID=$(lsof -t -i:5000)
 
 # If the PID exists, kill the process
