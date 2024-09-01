@@ -20,7 +20,7 @@ def RVC(request):
     voice_name = data.get('voice_name')
     
     file_path = check_file_exist(file_path)
-    output_path = RVC_gen(file_path, voice_name)
+    output_path = RVC_gen(file_path, voice_name) 
 
     return f"{PUBLIC_IP}/get-file/{output_path.split('/')[-1]}"
 
@@ -57,7 +57,7 @@ def RVC_gen(input_path, model_name):
     command = f"rm -f {save_as}"
     result = subprocess.run(command, shell=True, check=True)
 
-    command = f"python {DIR}RVC/tools/cmd/infer_cli.py --f0up_key {pitch} --input_path {input_path} --index_path {index_path} --f0method {f0_method} --opt_path {save_as} --model_name {model_name} --index_rate {index_rate} --device 'cuda:0' --is_half True --filter_radius 3 --resample_sr 0 --rms_mix_rate {volume_normalization} --protect {consonant_protection}"
+    command = f"python {DIR}RVC/tools/cmd/infer_cli.py --f0up_key {pitch} --input_path {input_path} --index_path {index_path} --f0method {f0_method} --opt_path {save_as} --model_name {model_name} --index_rate {index_rate} --device 'cpu' --is_half True --filter_radius 3 --resample_sr 0 --rms_mix_rate {volume_normalization} --protect {consonant_protection}"
     result = subprocess.run(command, shell=True, check=True)
 
     print("Output File Generated: ", save_as)
