@@ -62,6 +62,7 @@ def RVC_gen(input_path, model_name):
 
     print("Output File Generated: ", save_as)
     os.chdir(LAST_DIR)
+    print("")
     
     return save_as
 
