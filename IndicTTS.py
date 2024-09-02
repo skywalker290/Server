@@ -57,6 +57,9 @@ def indicTTS(request):
     pitch_change = data.get('pitch')
     speed_change = data.get('speed')
     decibel_change = data.get('decibel')
+    name = data.get('name')
+    phone = data.get('phone')
+    email = data.get('email')
 
     if(language not in available_language):
         return "Specify, Valid Language!" ,400
@@ -83,6 +86,7 @@ def indicTTS(request):
         decibel_change=decibel_change,
         pitch_change=pitch_change
         )
+    write_metadata(name,phone,email,"Output_mp3/"+output_file[:-4]+'.mp3')
     
     
     return f"http://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"

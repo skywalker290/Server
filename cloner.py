@@ -20,6 +20,12 @@ def Cloner(request):
     input_wav = data.get('input_wav')
     language = data.get('language')
     input_text = data.get('text')
+    name = data.get('name')
+    phone = data.get('phone')
+    email = data.get('email')
+
+    if name and phone and email:
+        return "specify,Trace Parameters", 400
 
     if not language:
         return "specify, language", 400
@@ -54,6 +60,7 @@ def Cloner(request):
     modify_audio(output_path,pitch_change=pitch_change,decibel_change=decibel_change,speed_change=speed_change)
     convert_wav_to_mp3(output_path,output_path[:-4]+'.mp3')
     os.remove(os.getcwd()+'/'+output_path)
+    write_metadata(name,phone,email,output_path[:-4]+'.mp3')
     
     # return send_from_directory('.', 'output.mp3', as_attachment=True)
     return f"http://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"
