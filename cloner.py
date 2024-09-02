@@ -24,7 +24,7 @@ def Cloner(request):
     phone = data.get('phone')
     email = data.get('email')
 
-    if name and phone and email:
+    if not (name and phone and email):
         return "specify,Trace Parameters", 400
 
     if not language:
