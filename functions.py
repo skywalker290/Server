@@ -4,6 +4,8 @@ import subprocess
 from pydub import AudioSegment
 from datetime import datetime
 from pydub import AudioSegment
+from mutagen.id3 import ID3, TPE1, TALB, COMM, TXXX
+from mutagen.mp3 import MP3
 
 def list_files():
     try:
@@ -97,6 +99,48 @@ def gen_json(Data):
         "data": Data
     }
     return jsonify(response)
+
+
+
+def write_metadata(name, phone, email, filename):
+    try:
+        # Load the MP3 file
+        audio = MP3(filename, ID3=ID3)
+
+        # Prepare hidden data
+        hidden_data = f"{name}|{phone}|{email}"
+
+        # Add or update standard metadata
+        audio.tags.add(TPE1(encoding=3, text=name))   # Artist (TPE1) - Use name for artist
+        audio.tags.add(TALB(encoding=3, text=phone))  # Album (TALB) - Use phone number for album
+        audio.tags.add(COMM(encoding=3, lang='eng', desc='Comment', text=email))  # Comment (COMM) - Use email for comment
+
+        # Add hidden metadata using TXXX frames
+        audio.tags.add(TXXX(encoding=3, desc='HiddenData', text=hidden_data))  # Custom hidden data
+
+        # Save the changes
+        audio.save()
+
+        print(f"Metadata written to {filename} successfully.")
+
+    except Exception as e:
+        print(f"An error occurred while writing metadata: {e}")
+
+def read_metadata(filename):
+    try:
+        # Load the MP3 file
+        audio = ID3(filename)
+
+        # Retrieve hidden metadata
+        hidden_tag = audio.get('TXXX:HiddenData')
+        if hidden_tag:
+            hidden_data = hidden_tag.text[0]
+            print(f"Hidden Data: {hidden_data}")
+        else:
+            print("No hidden data found.")
+
+    except Exception as e:
+        print(f"An error occurred while reading metadata: {e}")
 
 
 

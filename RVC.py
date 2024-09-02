@@ -4,10 +4,9 @@ from colorama import Fore
 from functions import *
 from flask import request
 
-# Load environment variables from the .env file
+
 load_dotenv()
 
-# Get the home directory dynamically
 HOME_DIR = os.path.expanduser("~")
 DIR = f"{HOME_DIR}/RealVC/"
 
@@ -18,10 +17,13 @@ def RVC(request):
     data = request.get_json()
     file_path = data.get('input_file')
     voice_name = data.get('voice_name')
+    phone = data.get('phone')
+    name = data.get('name')
+    email = data.get('email')
     
     file_path = check_file_exist(file_path)
     output_path = RVC_gen(file_path, voice_name) 
-
+    write_metadata(name,phone,email,output_path)
     return f"{PUBLIC_IP}/get-file/{output_path.split('/')[-1]}"
 
 
