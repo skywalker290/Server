@@ -124,6 +124,10 @@ def upload_file():
       f.save(file_path)
       return 'file uploaded successfully'
 
+@app.route('/vai')
+def serve_vai():
+    return render_template('VAI.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
 
