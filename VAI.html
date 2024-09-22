@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Player</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        width: 100%;
+        /* background-color: #f1f1f1; */
+        border-bottom: 1px solid #ddd;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+
+      .container-title {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+      }
+
+      .container {
+        text-align: center;
+        margin-bottom: 20px;
+        /* width: 100%; */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+        align-content: space-between;
+        align-items: center;
+
+        box-shadow: 4px 4px 18px rgb(137 141 154 / 30%);
+
+        position: relative;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 131px;
+        height: 40px;
+      }
+
+      /* Hide Default Checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* The Slider */
+      .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #2196f3;
+        border-radius: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        transition: 0.4s;
+        font-size: 14px;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Text Alignment */
+      .slider .text {
+        width: 50%;
+        text-align: center;
+        transition: color 0.4s;
+      }
+
+      /* Handle the transition */
+      input:checked + .slider {
+        background-color: rgb(233, 30, 99);
+      }
+
+      input:checked + .slider .text:first-child {
+        color: rgb(255, 255, 255);
+      }
+
+      input + .slider .text:last-child {
+        color: rgb(255, 255, 255);
+      }
+
+      input:checked + .slider .text:last-child {
+        color: white;
+      }
+
+      .slider:before {
+        content: "";
+        position: absolute;
+        height: 34px;
+        width: 50%;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 20px;
+        transition: transform 0.4s;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(60px);
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-select {
+        background-color: #fff;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 160px;
+        text-align: center;
+        transition: border-color 0.3s;
+      }
+
+      .dropdown-select:hover {
+        border-color: #2196f3;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        min-width: 160px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content div {
+        padding: 12px;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .dropdown-content div:hover {
+        background-color: #f1f1f1;
+      }
+      .input-group-inline {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+
+      .input-group textarea {
+        width: 93%;
+        box-shadow: inset #0000002b 0 0 10px 0;
+        padding: 3%;
+        height: 30vh;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: none;
+      }
+
+      .play-button {
+        background: #2196f3;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .play-button:hover {
+        background: #1976d2;
+      }
+
+      audio {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px 0;
+      }
+
+      .loading-bar-container {
+        width: 100%;
+        max-width: 600px;
+        height: 6px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+      }
+
+      .loading-bar {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          #4caf50 0%,
+          #4caf50 20%,
+          #fff 40%,
+          #4caf50 60%,
+          #4caf50 80%,
+          #fff 100%
+        );
+        background-size: 200% 100%;
+        animation: loading 2s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: -100% 0;
+        }
+        100% {
+          background-position: 100% 0;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .input-group {
+          /* width: 100%; */
+        }
+      }
+    </style>
+    <script>
+      var mstrLangId = "";
+
+      var mjoSampleText = {
+        bn: "সুমধুরা সাওয়ান টেকনোলজি ক্লাবে স্বাগতম",
+        kn: "ಸುಮಧುರ ಸಾವನ್ ಟೆಕ್ನಾಲಜಿ ಕ್ಲಬ್‌ಗೆ ಸುಸ್ವಾಗತ",
+        en: "Wecome to Sumadhura Sawan Technology club",
+        hi: "देवियों और सज्जनों, ड्रिवूल एक टेक्नोलॉजी कंपनी है। ड्रिवूल यूस्पीक एक बेहतरीन उत्पाद है जो टाइप किए हुए शब्दों को स्पीकर में सुनाती है। क्या आप मेरी आवाज़ सुन पा रहे हैं?",
+        ml: "സുമധുര സാവൻ ടെക്നോളജി ക്ലബ്ബിലേക്ക് സ്വാഗതം",
+        mr: "सुमधुरा सावन टेक्नॉलॉजी क्लबमध्ये आपले स्वागत आहे",
+        or: "ସୁମଧୁରା ସାୱାନ ଟେକ୍ନୋଲୋଜି କ୍ଲବକୁ ସ୍ୱାଗତ |",
+        ta: "சுமதுர சவான் டெக்னாலஜி கிளப்புக்கு வரவேற்கிறோம்",
+        te: "సుమధుర సావన్ టెక్నాలజీ క్లబ్‌కు స్వాగతం",
+        as: "সুমাধুৰা সাৱন টেকন'লজি ক্লাবলৈ আপোনাক স্বাগতম",
+        brx: "",
+        gu: "સુમધુરા સાવન ટેકનોલોજી ક્લબમાં આપનું સ્વાગત છે",
+        pa: "ਸੁਮਾਧੁਰਾ ਸਾਵਨ ਟੈਕਨਾਲੋਜੀ ਕਲੱਬ ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ",
+        raj: "",
+      };
+
+      function generateAudio() {
+        var textInput = $("#textInput").val();
+
+        let joParam = {
+          KEY: "7865",
+          text: textInput,
+          language: "en",
+          name :"Drivool",
+          email : "info@drivool.com",
+          phone : "1234567890"
+        };
+
+        if ($("#toggleSwitch").is(":checked")) {
+          joParam["speaker_name"] = "female";
+        }
+
+        if (mstrLangId !== "") {
+          joParam["language"] = mstrLangId;
+        }
+
+        $("div#generating").css("display", "block");
+        $("audio#audioPlayer").css("display", "none");
+
+        $.ajax({
+          type: "POST",
+          url: "https://13.200.241.87/GenerateVoice/",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify(joParam),
+          success: function (response) {
+            //window.location.href = response;
+            //console.log('Response:', response);
+            //$('audio#audioPlayer > source').attr("src",response.data )
+
+            var audio = document.getElementById("audioPlayer");
+            audio.src = response.data;
+            audio.load(); // Reload the audio element with the new source
+            audio.play();
+            $("div#generating").css("display", "none");
+            $("audio#audioPlayer").css("display", "block");
+          },
+        });
+      }
+
+      function fetchAndUpload() {
+        let fileUrl = "https://13.200.241.87/get-file/20240731052628.mp3";
+        fetch(fileUrl)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.blob();
+          })
+          .then((blob) => {
+            var formData = new FormData();
+            formData.append("file", blob, "0.mp3"); // You can name the file as you want
+
+            $.ajax({
+              url: "http://192.168.4.1/upload", // Replace with your server URL
+              type: "POST",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                console.log("File uploaded successfully:", response);
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                console.error("File upload failed:", textStatus, errorThrown);
+              },
+            });
+          })
+          .catch((error) => {
+            console.error("Fetching file failed:", error);
+          });
+      }
+
+      function deleteAudio() {
+        $.ajax({
+          url: "http://192.168.4.1/file?name=999.mp3&action=delete",
+          type: "GET",
+          headers: {
+            Authorization: "Basic " + "YWRtaW46YWRtaW4=",
+          },
+          success: function (response) {
+            console.log("Delete successful:", response);
+          },
+          error: function (xhr, status, error) {
+            console.error("Delete failed:", status, error);
+          },
+        });
+      }
+
+      function playAudio() {
+        $.ajax({
+          url: "http://192.168.4.1/file?name=999.mp3&action=play",
+          type: "GET",
+          headers: {
+            Authorization: "Basic " + "YWRtaW46YWRtaW4=",
+          },
+          success: function (response) {
+            console.log("Play successful:", response);
+          },
+          error: function (xhr, status, error) {
+            console.error("Play failed:", status, error);
+          },
+        });
+      }
+
+      function playInAmitabhVoice() {
+        var audio = document.getElementById("audioPlayer");
+
+        let joParam = {
+          KEY: "7865",
+          input_file: audio.src,
+          voice_name: "Amitabh-Voice",
+        };
+
+        $("div#generating2").css("display", "block");
+
+        $.ajax({
+          type: "POST",
+          url: "https://13.200.241.87/Cloner/",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify(joParam),
+          success: function (response) {
+            //console.log('Play successful:', response);
+            var audio = document.getElementById("audioAmitabhPlayer");
+            audio.src = "http://" + response.data;
+            audio.load(); // Reload the audio element with the new source
+            audio.play();
+            $("div#generating2").css("display", "none");
+            $("audio#audioAmitabhPlayer").css("display", "block");
+          },
+          error: function (xhr, status, error) {
+            console.error("Play failed:", status, error);
+          },
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="container-header">
+        <h2 class="container-title">Generate Text to Voice</h2>
+      </div>
+      <div class="input-group">
+        <textarea id="textInput"></textarea>
+      </div>
+
+      <div class="input-group-inline">
+        <label class="switch">
+          <input type="checkbox" id="toggleSwitch" />
+          <span class="slider">
+            <span class="text">Female</span>
+            <span class="text">Male</span>
+          </span>
+        </label>
+
+        <div class="dropdown">
+          <div class="dropdown-select" id="dropdownSelect">Select Language</div>
+          <div class="dropdown-content" id="dropdownContent"></div>
+        </div>
+
+        <button class="play-button" onclick="generateAudio()">
+          Generate <i class="fas fa-play"></i>
+        </button>
+        <div
+          id="generating"
+          class="loading-bar-container"
+          style="display: none"
+        >
+          <div class="loading-bar"></div>
+        </div>
+
+        <audio id="audioPlayer" controls style="display: none">
+          <source src="" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="container-header">
+        <h2 class="container-title">Record a voice or upload</h2>
+      </div>
+      <button class="play-button" onclick="playAudio()">
+        Record <i class="fas fa-play"></i>
+      </button>
+      <button class="play-button" onclick="fetchAndUpload()">
+        Upload <i class="fas fa-upload"></i>
+      </button>
+      <button class="play-button" onclick="deleteAudio()">
+        Delete <i class="fas fa-trash"></i>
+      </button>
+    </div>
+
+    <div class="container">
+      <div class="container-header">
+        <h2 class="container-title">Convert to celeberated voice</h2>
+      </div>
+
+      <button class="play-button" onclick="playInAmitabhVoice()">
+        Play in Amitabh voice
+      </button>
+      <div id="generating2" class="loading-bar-container" style="display: none">
+        <div class="loading-bar"></div>
+      </div>
+
+      <audio id="audioAmitabhPlayer" controls style="display: none">
+        <source src="" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <script>
+      $("#toggleSwitch").change(function () {
+        var isChecked = $(this).is(":checked");
+        var transitionDuration = 400; // Duration of the animation
+
+        if (isChecked) {
+          $(".slider").css({
+            "background-color": "#e91e63", // Pink color for "Female"
+            "justify-content": "flex-start",
+          });
+
+          // Change text after animation ends
+          $("#status").text("Female");
+          $(".text.male").css("opacity", "0");
+          $(".text.female").css("opacity", "1");
+        } else {
+          $(".slider").css({
+            "background-color": "#2196F3", // Blue color for "Male"
+            "justify-content": "flex-end",
+          });
+
+          // Change text after animation ends
+          $(".text.male").css("opacity", "1");
+          $(".text.female").css("opacity", "0");
+          $("#status").text("Male");
+        }
+      });
+
+      $("#dropdownSelect").click(function () {
+        if ($("#dropdownContent").css("display") === "none") {
+          $("#dropdownContent").css("display", "block");
+        } else {
+          $("#dropdownContent").css("display", "none");
+        }
+      });
+
+      $(document).click(function (event) {
+        if (!$(event.target).closest(".dropdown").length) {
+          $("#dropdownContent").css("display", "none");
+        }
+      });
+
+      let mjoLanguages = {
+        en: { et: "English", lt: "English" },
+        hi: { et: "Hindi", lt: "हिंदी" },
+        kn: { et: "Kannada", lt: "ಕನ್ನಡ" },
+        ml: { et: "Malayalam", lt: "മലയാളം" },
+        mr: { et: "Marathi", lt: "मराठी" },
+        or: { et: "Oriya", lt: "ଓଡ଼ିଆ" },
+        ta: { et: "Tamil", lt: "தமிழ்" },
+        te: { et: "Telugu", lt: "తెలుగు" },
+      };
+
+      populateLanguagesMenu(mjoLanguages);
+
+      $.ajax({
+        type: "GET",
+        url: "https://13.200.241.87/languages/",
+        contentType: "application/json",
+        dataType: "json",
+        success: function (joLanguages) {
+          populateLanguagesMenu(joLanguages);
+        },
+      });
+
+      function populateLanguagesMenu(joLanguages) {
+        let strLanguageMenuContentHtml = "";
+
+        for (strCode in joLanguages) {
+          console.log(
+            `${strCode} : ${joLanguages[strCode].et} - ${joLanguages[strCode].lt}`
+          );
+          strLanguageMenuContentHtml += `<div langid="${strCode}">${joLanguages[strCode].et} - ${joLanguages[strCode].lt}</div>`;
+        }
+
+        $("div#dropdownContent").html(strLanguageMenuContentHtml);
+
+        $(".dropdown-content div").click(function () {
+          var selectedText = $(this).text();
+          var strLangId = $(this).attr("langid");
+          console.log(`Lang Id ${strLangId}`);
+          mstrLangId = strLangId;
+          $("textarea#textInput").val(mjoSampleText[mstrLangId]);
+          $("#dropdownSelect").text(selectedText);
+          $("#dropdownContent").css("display", "none");
+        });
+      }
+    </script>
+  </body>
+</html>
