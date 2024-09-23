@@ -49,69 +49,35 @@ def rvc():
         return check
     return gen_json(RVC(request))
 
-@app.route('/languages/',methods=['GET'])
+@app.route('/languages/', methods=['GET'])
 def show_languages():
     text = {
-        "gu": {
-            "et": "Gujarati",
-            "lt": "ગુજરાતી"
-        },
-        "hi": {
-            "et": "Hindi",
-            "lt": "हिंदी"
-        },
-        "kn": {
-            "et": "Kannada",
-            "lt": "ಕನ್ನಡ"
-        },
-        "ml": {
-            "et": "Malayalam",
-            "lt": "മലയാളം"
-        },
-        "mni": {
-            "et": "Manipuri",
-            "lt": "মণিপুরী"
-        },
-        "mr": {
-            "et": "Marathi",
-            "lt": "मराठी"
-        },
-        "or": {
-            "et": "Oriya",
-            "lt": "ଓଡ଼ିଆ"
-        },
-        "pa": {
-            "et": "Punjabi",
-            "lt": "ਪੰਜਾਬੀ"
-        },
-        "raj": {
-            "et": "Rajasthani",
-            "lt": "राजस्थानी"
-        },
-        "ta": {
-            "et": "Tamil",
-            "lt": "தமிழ்"
-        },
-        "te": {
-            "et": "Telugu",
-            "lt": "తెలుగు"
-        },
-        "as": {
-            "et": "Assamese",
-            "lt": "অসমীয়া"
-        },
-        "bn": {
-            "et": "Bengali",
-            "lt": "বাংলা"
-        },
-        "brx": {
-            "et": "Bodo",
-            "lt": "बर'"
-        }
+        "gu": {"et": "Gujarati", "lt": "ગુજરાતી"},
+        "hi": {"et": "Hindi", "lt": "हिंदी"},
+        "kn": {"et": "Kannada", "lt": "ಕನ್ನಡ"},
+        "ml": {"et": "Malayalam", "lt": "മലയാളം"},
+        "mni": {"et": "Manipuri", "lt": "মণিপুরী"},
+        "mr": {"et": "Marathi", "lt": "मराठी"},
+        "or": {"et": "Oriya", "lt": "ଓଡ଼ିଆ"},
+        "pa": {"et": "Punjabi", "lt": "ਪੰਜਾਬੀ"},
+        "raj": {"et": "Rajasthani", "lt": "राजस्थानी"},
+        "ta": {"et": "Tamil", "lt": "தமிழ்"},
+        "te": {"et": "Telugu", "lt": "తెలుగు"},
+        "as": {"et": "Assamese", "lt": "অসমীয়া"},
+        "bn": {"et": "Bengali", "lt": "বাংলা"},
+        "brx": {"et": "Bodo", "lt": "बर'"}
     }
 
-    return jsonify(text), 200
-
+    # Directory containing model folders
+    directory = "models/v1/"
+    
+    # Get the list of folder names in the 'models/v1/' directory
+    models = [name for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
+    
+    # Filter the 'text' dictionary to return only data for models present in 'models'
+    filtered_text = {key: value for key, value in text.items() if key in models}
+    
+    return jsonify(filtered_text), 200
 @app.route('/upload')
 def upload_filee():
    return render_template('upload.html')
