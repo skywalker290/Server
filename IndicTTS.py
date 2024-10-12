@@ -1,5 +1,6 @@
 from TTS.utils.synthesizer import Synthesizer
 from functions import *
+from Translate import  Translate_Eng_to_Indic
 
 def init_synthesizer(language):
     model_path = f"models/v1/{language}/fastpitch/best_model.pth"
@@ -53,6 +54,7 @@ def indicTTS(request):
     input_wav = data.get('input_wav')
     language = data.get('language')
     input_text = data.get('text')
+    translate = data.get('translate') # To use Indic Translator Set it '1' or Else '0'
     speaker = data.get('speaker_name')
     pitch_change = data.get('pitch')
     speed_change = data.get('speed')
@@ -60,6 +62,10 @@ def indicTTS(request):
     name = data.get('name')
     phone = data.get('phone')
     email = data.get('email')
+
+    # Convert English Text to Indic Text
+    if(translate and translate == '1'):
+        input_text = Translate_Eng_to_Indic(input_text,language)
 
     if(language not in available_language):
         return "Specify, Valid Language!" ,400

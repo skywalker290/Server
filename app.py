@@ -60,7 +60,7 @@ def show_languages():
         "mr": {"et": "Marathi", "lt": "मराठी"},
         "or": {"et": "Oriya", "lt": "ଓଡ଼ିଆ"},
         "pa": {"et": "Punjabi", "lt": "ਪੰਜਾਬੀ"},
-        "raj": {"et": "Rajasthani", "lt": "राजस्थानी"},
+        "raj": {"et": "Rajasthani(Traslation Not Available)", "lt": "राजस्थानी"},
         "ta": {"et": "Tamil", "lt": "தமிழ்"},
         "te": {"et": "Telugu", "lt": "తెలుగు"},
         "as": {"et": "Assamese", "lt": "অসমীয়া"},
