@@ -65,7 +65,7 @@ def indicTTS(request):
 
     # Convert English Text to Indic Text
     if(translate and translate == '1'):
-        input_text = Translate_Eng_to_Indic(input_text,language)
+        input_text = Translate_Eng_to_Indic(input_text,language)[0]
 
     if(language not in available_language):
         return "Specify, Valid Language!" ,400
