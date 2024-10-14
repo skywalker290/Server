@@ -1,7 +1,7 @@
 
 # # https://colab.research.google.com/github/AI4Bharat/IndicTrans2/blob/main/huggingface_interface/colab_inference.ipynb#scrollTo=6OG3Bw-sHnf3
 # # Indictrans2
-
+from flask import Flask, request
 import torch
 from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig, AutoTokenizer
 from IndicTrans2.huggingface_interface.IndicTransToolkit.IndicTransToolkit import IndicProcessor
@@ -89,6 +89,7 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
 
     return translations
 
+
 def Translate_Eng_to_Indic(eng_text,target_lang):
     en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
     en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, quantization)
@@ -119,3 +120,11 @@ def Translate_Eng_to_Indic(eng_text,target_lang):
     Translated_text = batch_translate(eng_text, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer, ip)
 
     return Translated_text
+
+def Traslate_Request(request):
+    
+    data = request.get_json()
+    eng_text = data.get('text')
+    target_lang = data.get('language')
+
+    return Translate_Eng_to_Indic(eng_text=eng_text,target_lang=target_lang)

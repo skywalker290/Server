@@ -5,6 +5,7 @@ from flask import Flask, send_file
 from functions import *
 from flask_cors import CORS, cross_origin
 from RVC import *
+from Translate import Traslate_Request
 
 app = Flask(__name__, static_url_path='/Output_mp3')
 CORS(app)
@@ -93,6 +94,13 @@ def upload_file():
 @app.route('/vai')
 def serve_vai():
     return render_template('VAI.html')
+
+@app.route('/indictrans')
+def Eng_to_Indic():
+    check = check_credentials(request)
+    if(check != True):
+        return check
+    return gen_json(Traslate_Request(request=request))
 
 if __name__ == "__main__":
     app.run(debug=True)
