@@ -95,7 +95,7 @@ def upload_file():
 def serve_vai():
     return render_template('VAI.html')
 
-@app.route('/indictrans')
+@app.route('/indictrans',methods = ['POST'])
 def Eng_to_Indic():
     check = check_credentials(request)
     if(check != True):
