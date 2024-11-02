@@ -19,7 +19,7 @@ def Translit_word(request):
 
     translit_engine = XlitEngine(tgt_lang, beam_width=4, rescore=True, src_script_type="en")
 
-    output_text = translit_engine._transliterate_word(text, src_lang="en", tgt_lang=tgt_lang, topk=count)
+    output_text = translit_engine._transliterate_word(text, src_lang="en", tgt_lang=tgt_lang, topk=int(count))
 
     return output_text, 200
 
