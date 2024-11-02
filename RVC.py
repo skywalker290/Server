@@ -12,6 +12,7 @@ DIR = f"{HOME_DIR}/RealVC/"
 
 # Retrieve the public IP from the .env file
 PUBLIC_IP = os.getenv('PUBLIC_IP')
+PUBLIC_IP = "103.227.96.199"
 
 def RVC(request):
     data = request.get_json()
