@@ -14,7 +14,7 @@ def cloner(text,lang,input_wav,output_path):
 
 
 def Cloner(request):
-    PUBLIC_IP = "13.200.241.87"
+    PUBLIC_IP = "103.227.96.199"
     data = request.get_json()
     
     input_wav = data.get('input_wav')

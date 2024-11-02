@@ -6,6 +6,7 @@ from functions import *
 from flask_cors import CORS, cross_origin
 from RVC import *
 from Translate import Traslate_Request
+from trasliteration import *
 
 app = Flask(__name__, static_url_path='/Output_mp3')
 CORS(app)
@@ -101,6 +102,19 @@ def Eng_to_Indic():
     if(check != True):
         return check
     return gen_json(Traslate_Request(request=request))
+@app.route('/transword',methods = ['POST'])
+def Transliterate_word():
+    check = check_credentials(request)
+    if(check != True):
+        return check
+    return gen_json(Translit_word(request))
+
+@app.route('/transtext',methods = ['POST'])
+def Transliterate_text():
+    check = check_credentials(request)
+    if(check != True):
+        return check
+    return gen_json(Transliterate_text(request))
 
 if __name__ == "__main__":
     app.run(debug=True)
