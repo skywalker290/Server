@@ -11,11 +11,10 @@ HOME_DIR = os.path.expanduser("~")
 DIR = f"{HOME_DIR}/RealVC/"
 
 # Retrieve the public IP from the .env file
-# PUBLIC_IP = os.getenv('PUBLIC_IP')
-PUBLIC_IP = "103.227.96.199"
+PUBLIC_IP = os.getenv('PUBLIC_IP')
+# PUBLIC_IP = "103.227.96.199"
 
 def RVC(request):
-    PUBLIC_IP = "103.227.96.199"
     data = request.get_json()
     file_path = data.get('input_file')
     voice_name = data.get('voice_name')
@@ -26,7 +25,7 @@ def RVC(request):
     file_path = check_file_exist(file_path)
     output_path = RVC_gen(file_path, voice_name) 
     write_metadata(name,phone,email,output_path)
-    return f"{PUBLIC_IP}/get-file/{output_path.split('/')[-1]}"
+    return f"https://{PUBLIC_IP}/get-file/{output_path.split('/')[-1]}"
 
 
 def RVC_gen(input_path, model_name):

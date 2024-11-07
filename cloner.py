@@ -2,6 +2,11 @@ import torch
 from TTS.api import TTS # type: ignore
 from functions import *
 from IndicTTS import indicTTS
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+PUBLIC_IP = os.getenv("PUBLIC_IP")
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -14,7 +19,7 @@ def cloner(text,lang,input_wav,output_path):
 
 
 def Cloner(request):
-    PUBLIC_IP = "103.227.96.199"
+    # PUBLIC_IP = "103.227.96.199"
     data = request.get_json()
     
     input_wav = data.get('input_wav')
@@ -63,4 +68,4 @@ def Cloner(request):
     write_metadata(name,phone,email,output_path[:-4]+'.mp3')
     
     # return send_from_directory('.', 'output.mp3', as_attachment=True)
-    return f"http://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"
+    return f"https://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"

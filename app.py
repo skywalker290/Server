@@ -17,7 +17,7 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB
 def hello():
     return gen_json("Helloo There!")
 
-@app.route("/GenerateVoice/", methods=['POST'])
+@app.route("/generate_voice", methods=['POST'])
 def clone():
     check = check_credentials(request)
     if(check != True):
@@ -29,14 +29,14 @@ def get_file(filename):
     filename='Output_mp3/'+filename 
     return send_file(filename, as_attachment=True)
 
-@app.route('/list-speakers/',methods=['GET'])
+@app.route('/list-speakers',methods=['GET'])
 def list_speakers():
     check = check_credentials(request)
     if(check != True):
         return check
     return list_files()
 
-@app.route('/refresh-speakers/',methods=['GET'])
+@app.route('/refresh-speakers',methods=['GET'])
 def refresh_speakers():
     check = check_credentials(request)
     if(check != True):
@@ -44,14 +44,14 @@ def refresh_speakers():
     git_pull("Input_wavs")
     return list_files()
 
-@app.route('/Cloner/',methods=['POST'])
+@app.route('/cloner',methods=['POST'])
 def rvc():
     check = check_credentials(request)
     if(check != True):
         return check
     return gen_json(RVC(request))
 
-@app.route('/languages/', methods=['GET'])
+@app.route('/languages', methods=['GET'])
 def show_languages():
     text = {
         "gu": {"et": "Gujarati", "lt": "ગુજરાતી"},
