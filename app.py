@@ -17,7 +17,7 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB
 def hello():
     return gen_json("Helloo There!")
 
-@app.route("/generate_voice", methods=['POST'])
+@app.route("/generate-voice", methods=['POST'])
 def clone():
     check = check_credentials(request)
     if(check != True):
