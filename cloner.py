@@ -11,7 +11,7 @@ PUBLIC_IP = os.getenv("PUBLIC_IP")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+# tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 def cloner(text,lang,input_wav,output_path):
     tts.tts_to_file(text=text, speaker_wav=input_wav, language=lang, file_path=output_path)

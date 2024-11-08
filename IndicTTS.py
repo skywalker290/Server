@@ -61,7 +61,7 @@ def indicTTS(request):
     language = data.get('language')
     input_text = data.get('text')
     translate = data.get('translate') # To use Indic Translator Set it '1' or Else '0'
-    speaker = data.get('speaker_name')
+    speaker = data.get('gender')
     pitch_change = data.get('pitch')
     speed_change = data.get('speed')
     decibel_change = data.get('decibel')
