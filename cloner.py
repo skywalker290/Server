@@ -38,6 +38,8 @@ def Cloner(request):
         if(language!='en'):
             return indicTTS(request)
         
+    return indicTTS(request)
+        
     pitch_change = data.get('pitch')
     speed_change = data.get('speed')
     decibel_change = data.get('decibel')
