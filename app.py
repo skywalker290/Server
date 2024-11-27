@@ -83,7 +83,7 @@ def show_languages():
 @app.route('/upload')
 def upload_filee():
    return render_template('upload.html')
-	
+
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
@@ -102,6 +102,7 @@ def Eng_to_Indic():
     if(check != True):
         return check
     return gen_json(Traslate_Request(request=request))
+
 @app.route('/transword',methods = ['POST'])
 def Transliterate_word():
     check = check_credentials(request)
