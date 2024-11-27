@@ -8,7 +8,7 @@ from RVC import *
 from Translate import Traslate_Request
 from trasliteration import *
 
-app = Flask(__name__, static_url_path='/Output_mp3')
+app = Flask(__name__, static_url_path='/AI4BharatMp3')
 CORS(app)
 
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB
@@ -24,9 +24,9 @@ def clone():
         return check
     return gen_json(Cloner(request=request))
 
-@app.route('/get-file/<filename>', methods=['GET'])
-def get_file(filename):
-    filename='Output_mp3/'+filename 
+@app.route('/get-file/<user>/<filename>', methods=['GET'])
+def get_file(user,filename):
+    filename= f"AI4BharatMp3/{user}/{filename}"  
     return send_file(filename, as_attachment=True)
 
 @app.route('/list-speakers',methods=['GET'])
@@ -88,7 +88,7 @@ def upload_filee():
 def upload_file():
    if request.method == 'POST':
       f = request.files['file']
-      file_path = os.path.join("Output_mp3", f.filename)
+      file_path = os.path.join("AI4BharatMp3", f.filename)
       f.save(file_path)
       return 'file uploaded successfully'
 
@@ -118,5 +118,3 @@ def Transliterate_text():
 
 if __name__ == "__main__":
     app.run(ssl_context = "adhoc",debug=True)
-
-

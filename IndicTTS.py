@@ -3,6 +3,7 @@ from functions import *
 from Translate import  Translate_Eng_to_Indic
 from dotenv import load_dotenv
 import os
+import time
 load_dotenv()
 
 PUBLIC_IP = os.getenv("PUBLIC_IP")
@@ -29,10 +30,21 @@ def init_synthesizer(language):
     )
     return synthesizer
 
-def TTS_to_file(synthesizer,text,speaker_name,speaker_wav,pitch_change,speed_change,decibel_change):
+def TTS_to_file(synthesizer,text,speaker_name,speaker_wav,pitch_change,speed_change,decibel_change,user):
     
-    output_file = gen_name() + '.wav'
-    output_path = "Output_mp3/" + output_file
+    # relativeFilePath = f"/{user}/{int(time.time() * 1000)}.wav"
+    # output_file = gen_name() + '.wav'
+    output_file = f"{int(time.time() * 1000)}.wav"
+    directory = f"AI4BharatMp3/{user}/"
+    output_path =  directory + output_file
+
+    if not os.path.exists(directory):
+        # Create the directory
+        os.makedirs(directory)
+        # print(f"Directory '{directory}' created.")
+    else:
+        print(f"Directory '{directory}' already exists.")
+
 
     wav = synthesizer.tts(
         text=text,
@@ -45,6 +57,7 @@ def TTS_to_file(synthesizer,text,speaker_name,speaker_wav,pitch_change,speed_cha
         reference_speaker_name=None,
         split_sentences=True,
     )
+
     synthesizer.save_wav(wav=wav, path=output_path)
     modify_audio(output_path,pitch_change=pitch_change,speed_change=speed_change,decibel_change=decibel_change)
     convert_wav_to_mp3(output_path,output_path[:-4]+'.mp3')
@@ -68,6 +81,9 @@ def indicTTS(request):
     name = data.get('name')
     phone = data.get('phone')
     email = data.get('email')
+    user =  email.replace("@gmail.com", "").replace(".","")
+    
+    # print(f"file name : {relativeFilePath}" )
 
     # Convert English Text to Indic Text
     if(translate and translate == '1'):
@@ -89,15 +105,18 @@ def indicTTS(request):
         return "Pass the Text!", 400
     
     synthesizer = init_synthesizer(language=language)
+
     output_file = TTS_to_file(
-        synthesizer=synthesizer,
-        text=text,
-        speaker_name=speaker_name,
-        speaker_wav=input_file,
-        speed_change=speed_change,
-        decibel_change=decibel_change,
-        pitch_change=pitch_change
+            synthesizer=synthesizer,
+            text=text,
+            speaker_name=speaker_name,
+            speaker_wav=input_file,
+            speed_change=speed_change,
+            decibel_change=decibel_change,
+            pitch_change=pitch_change,
+            user=user
         )
-    write_metadata(name,phone,email,"Output_mp3/"+output_file[:-4]+'.mp3')
+
+    write_metadata(name,phone,email,"AI4BharatMp3/"+output_file[:-4]+'.mp3')
     
-    return f"https://{PUBLIC_IP}/get-file/{output_file[:-4]+'.mp3'}"
+    return f"https://{PUBLIC_IP}/get-file/{user}/{output_file[:-4]+'.mp3'}"
