@@ -27,6 +27,7 @@ echo "Starting Gunicorn server..."
 echo "============================================" >> output.log
 echo "Gunicorn server started at: $(date '+%Y-%m-%d %H:%M:%S')" >> output.log
 echo "============================================" >> output.log
-nohup gunicorn -b localhost:5000 app:app >> output.log 2>&1 &
+nohup gunicorn -b localhost:5000 --access-logfile app:app >> output.log 2>&1 &
+
 
 echo "Gunicorn server started"
