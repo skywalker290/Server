@@ -9,6 +9,7 @@
 cd ~/Server/
 
 git pull
+export CUDA_VISIBLE_DEVICES="-1"  # Disable GPU
 
 PID=$(lsof -t -i:5000)
 
