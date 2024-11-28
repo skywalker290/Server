@@ -54,12 +54,13 @@ def Cloner(request):
     
     if input_wav:
         input_file = 'Input_wavs/' + input_wav
-    if language:
-        output_language = language
+    # if language:
+    #     output_language = language
     if input_text:
         text = input_text
     else:
         return "Pass the Text!", 400
+    
     
     cloner(text=text, lang=output_language, input_wav=input_file, output_path=output_path)
     modify_audio(output_path,pitch_change=pitch_change,decibel_change=decibel_change,speed_change=speed_change)
