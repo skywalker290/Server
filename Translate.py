@@ -101,17 +101,31 @@ def Translate_Eng_to_Indic(eng_text,target_lang):
         "hi": "hin_Deva",
         "kn": "kan_Knda",
         "ml": "mal_Mlym",
-        "mni":"mni_Mtei",  # Manipuri has two variants
+        "mni": "mni_Mtei",  # Manipuri has two variants
         "mr": "mar_Deva",
         "or": "ory_Orya",
         "pa": "pan_Guru",
-        "raj":"hin_Deva",  # Rajasthani is not included in AI4Bharat's model
+        "raj": "hin_Deva",  # Rajasthani is not included in AI4Bharat's model
         "ta": "tam_Taml",
         "te": "tel_Telu",
         "as": "asm_Beng",
         "bn": "ben_Beng",
-        "brx": "brx_Deva"
+        "brx": "brx_Deva",
+        "kas_Arab": "kas_Arab",  # Kashmiri (Arabic)
+        "kas_Deva": "kas_Deva",  # Kashmiri (Devanagari)
+        "san": "san_Deva",  # Sanskrit
+        "mai": "mai_Deva",  # Maithili
+        "sat": "sat_Olck",  # Santali
+        "doi": "doi_Deva",  # Dogri
+        "snd_Arab": "snd_Arab",  # Sindhi (Arabic)
+        "snd_Deva": "snd_Deva",  # Sindhi (Devanagari)
+        "eng": "eng_Latn",  # English
+        "gom": "gom_Deva",  # Konkani
+        "mni_Beng": "mni_Beng",  # Manipuri (Bengali)
+        "npi": "npi_Deva",  # Nepali
+        "urd": "urd_Arab"  # Urdu
     }
+
 
     eng_text = [eng_text]
 
