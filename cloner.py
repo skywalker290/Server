@@ -11,7 +11,7 @@ PUBLIC_IP = os.getenv("PUBLIC_IP")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 def cloner(text,lang,input_wav,output_path):
     tts.tts_to_file(text=text, speaker_wav=input_wav, language=lang, file_path=output_path)
@@ -35,11 +35,9 @@ def Cloner(request):
     if not language:
         return "specify, language", 400
     else:
-        if(language!='en'):
+        if(language!='en-x'):
             return indicTTS(request)
-        
-    return indicTTS(request)
-        
+    
     pitch_change = data.get('pitch')
     speed_change = data.get('speed')
     decibel_change = data.get('decibel')
@@ -56,12 +54,13 @@ def Cloner(request):
     
     if input_wav:
         input_file = 'Input_wavs/' + input_wav
-    if language:
-        output_language = language
+    # if language:
+    #     output_language = language
     if input_text:
         text = input_text
     else:
         return "Pass the Text!", 400
+    
     
     cloner(text=text, lang=output_language, input_wav=input_file, output_path=output_path)
     modify_audio(output_path,pitch_change=pitch_change,decibel_change=decibel_change,speed_change=speed_change)

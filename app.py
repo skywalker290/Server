@@ -118,4 +118,4 @@ def Transliterate_text():
     return gen_json(Transliterate_text(request))
 
 if __name__ == "__main__":
-    app.run(ssl_context = "adhoc",debug=True)
+    app.run(host='0.0.0.0', port=5000, ssl_context="adhoc", debug=True)
