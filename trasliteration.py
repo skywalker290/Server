@@ -21,7 +21,7 @@ def Translit_word(request):
 
     output_text = translit_engine._transliterate_word(text, src_lang="en", tgt_lang=tgt_lang, topk=int(count))
 
-    return output_text, 200
+    return output_text
 
 def Translit_text(request):
     data = request.get_json()
@@ -38,7 +38,7 @@ def Translit_text(request):
 
     output_text = translit_engine._transliterate_sentence(text, src_lang = "en", tgt_lang=tgt_lang)
 
-    return output_text, 200
+    return output_text
     
 
 
